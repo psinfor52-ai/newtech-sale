@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>뉴텍(NEWTECH) S급 기구 창고 대방출 - 프리미엄 카탈로그</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800&display=swap');
+        
+        body { 
+            font-family: 'Pretendard', sans-serif; 
+            background-color: #f8fafc; 
+            color: #0f172a;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%);
+        }
+
+        .product-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        #image-preview {
+            position: fixed;
+            pointer-events: none;
+            display: none;
+            z-index: 1000;
+            width: 380px;
+            height: 280px;
+            background-color: #fff;
+            border: 4px solid #3b82f6;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.4);
+        }
+
+        #image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(59, 130, 246, 0.9);
+            color: white;
+            text-align: center;
+            padding: 4px 0;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        #contact-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(6px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 2.5rem;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .filter-btn.active {
+            background-color: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            height: 250px;
+            max-height: 300px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Actual Item Image Preview Popup -->
+    <div id="image-preview">
+        <img id="preview-img" src="" alt="실물 이미지">
+        <div class="preview-label">실제 판매 상품 촬영 이미지 (현 상태)</div>
+    </div>
+
+    <!-- Inquiry Modal -->
+    <div id="contact-modal">
+        <div class="modal-content relative">
+            <button onclick="closeModal()" class="absolute top-6 right-8 text-2xl text-gray-400 hover:text-gray-600 transition-colors">✕</button>
+            <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-8">
+                <span class="text-4xl text-blue-600">✉️</span>
+            </div>
+            <h3 class="text-3xl font-extrabold mb-4 tracking-tight text-slate-900">견적 및 상담 신청</h3>
+            <p class="text-slate-500 leading-relaxed mb-8 font-medium">
+                "선택하신 제품의 관리 번호(NO)를 말씀해주시면<br>상세 사진과 최종 견적서를 즉시 보내드립니다."
+            </p>
+            <div class="bg-slate-50 p-6 rounded-2xl space-y-4 mb-4 border border-slate-100">
+                <div class="flex justify-between items-center">
+                    <span class="text-sm text-slate-400 font-bold uppercase tracking-widest">Call Center</span>
+                    <span class="text-2xl font-black text-blue-700">010-3029-1029</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-sm text-slate-400 font-bold uppercase tracking-widest">Kakao Talk</span>
+                    <span class="text-2xl font-black text-slate-900">ASSISTFITTV</span>
+                </div>
+            </div>
+            <button onclick="closeModal()" class="w-full mt-6 bg-slate-900 text-white py-4 rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-slate-200">확인했습니다</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="hero-gradient text-white py-28 px-6 text-center relative overflow-hidden">
+        <div class="relative z-10">
+            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-6 py-2 rounded-full border border-white/20 mb-8">
+                <span class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
+                <span class="text-sm font-bold tracking-widest">S-GRADE PREMIUM CLEARANCE</span>
+            </div>
+            <h1 class="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-none">NEWTECH<br>WAREHOUSE</h1>
+            <p class="text-xl md:text-2xl opacity-80 max-w-3xl mx-auto leading-relaxed font-light">
+                실사용 0회, 엄격한 검수를 마친 뉴텍 정품 34종<br>
+                <span class="font-bold text-white underline decoration-cyan-400 underline-offset-8">전시 특가 단가로 전국 즉시 납품</span> 가능합니다.
+            </p>
+        </div>
+        <div class="absolute inset-0 opacity-20 pointer-events-none">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500 rounded-full blur-[120px]"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500 rounded-full blur-[120px]"></div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 -mt-16 relative z-20 pb-32">
+        <!-- Policy Summary -->
+        <div class="mb-16">
+            <section class="bg-white rounded-[3rem] shadow-2xl p-10 border border-blue-50 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="flex flex-col items-center text-center p-4 hover:bg-slate-50 rounded-2xl transition-colors">
+                    <div class="text-4xl mb-4">💎</div>
+                    <h3 class="font-bold text-lg mb-2">실사용 0회 S급</h3>
+                    <p class="text-sm text-slate-500 break-keep leading-relaxed">전시 및 단순 반품 제품으로 기능상 완벽한 새 제품입니다.</p>
+                </div>
+                <div class="flex flex-col items-center text-center p-4 hover:bg-slate-50 rounded-2xl transition-colors">
+                    <div class="text-4xl mb-4">🚫</div>
+                    <h3 class="font-bold text-lg mb-2">교환/반품 불가</h3>
+                    <p class="text-sm text-slate-500 break-keep leading-relaxed">파격 할인가 적용 상품으로 단순 변심 처리는 불가합니다.</p>
+                </div>
+                <div class="flex flex-col items-center text-center p-4 hover:bg-slate-50 rounded-2xl transition-colors">
+                    <div class="text-4xl mb-4">⚙️</div>
+                    <h3 class="font-bold text-lg mb-2">미세 흠집 양해</h3>
+                    <p class="text-sm text-slate-500 break-keep leading-relaxed">전시 과정의 미세 흠집이 있을 수 있으나 실사용엔 무관합니다.</p>
+                </div>
+                <div class="flex flex-col items-center text-center p-4 hover:bg-slate-50 rounded-2xl transition-colors">
+                    <div class="text-4xl mb-4">🚚</div>
+                    <h3 class="font-bold text-lg mb-2">배송비 추후안내</h3>
+                    <p class="text-sm text-slate-500 break-keep leading-relaxed">지역 및 수량에 따라 납품 및 설치 비용은 개별 통보됩니다.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Search & Interaction Info -->
+        <section class="mb-12">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-4">
+                <div id="filter-container" class="flex flex-wrap gap-2">
+                    <button class="filter-btn active px-6 py-2.5 rounded-2xl border-2 border-slate-200 font-bold transition-all" data-category="all">전체보기</button>
+                    <button class="filter-btn px-6 py-2.5 rounded-2xl border-2 border-slate-200 font-bold transition-all" data-category="등">등</button>
+                    <button class="filter-btn px-6 py-2.5 rounded-2xl border-2 border-slate-200 font-bold transition-all" data-category="하체">하체</button>
+                    <button class="filter-btn px-6 py-2.5 rounded-2xl border-2 border-slate-200 font-bold transition-all" data-category="가슴">가슴</button>
+                    <button class="filter-btn px-6 py-2.5 rounded-2xl border-2 border-slate-200 font-bold transition-all" data-category="어깨">어깨</button>
+                    <button class="filter-btn px-6 py-2.5 rounded-2xl border-2 border-slate-200 font-bold transition-all" data-category="복합">복합/기타</button>
+                </div>
+                <div class="relative w-full md:w-96">
+                    <input type="text" id="search-bar" placeholder="찾으시는 기구명을 입력하세요..." class="w-full px-6 py-4 rounded-2xl border-2 border-slate-100 focus:border-blue-500 focus:outline-none shadow-sm transition-all font-medium">
+                </div>
+            </div>
+            <p class="text-sm text-blue-500 font-bold flex items-center gap-2">
+                <span class="inline-block w-5 h-5 bg-blue-100 text-center rounded-full text-xs leading-5">i</span>
+                기구 이름에 마우스 커서를 올리면 '실물 상태 사진'을 즉시 확인할 수 있습니다.
+            </p>
+        </section>
+
+        <!-- Product Grid -->
+        <section id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <!-- Populated via JS -->
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-white py-24 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12">
+            <div class="max-w-lg">
+                <h2 class="text-4xl font-extrabold mb-6 text-blue-400 italic italic tracking-tighter">NEWTECH PRE-OWNED</h2>
+                <p class="text-slate-400 text-lg leading-relaxed font-medium">
+                    뉴텍 프리미엄 기구와 함께 귀하의 센터를 완성하세요.<br>
+                    본 페이지에 게재된 모든 품목은 검수가 완료된 실제 매물입니다.<br>
+                    상세 견적 및 설치 일정 문의는 아래 채널로 연락 부탁드립니다.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-10 w-full md:w-auto">
+                <div class="flex flex-col">
+                    <span class="text-xs text-slate-500 uppercase font-black tracking-[0.2em] mb-3">📞 Direct Call</span>
+                    <p class="text-3xl font-black text-white">010-3029-1029</p>
+                    <p class="text-sm text-slate-500 mt-2">평일/주말 상담 가능</p>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xs text-slate-500 uppercase font-black tracking-[0.2em] mb-3">💬 Kakao Messenger</span>
+                    <p class="text-3xl font-black text-white">ASSISTFITTV</p>
+                    <p class="text-sm text-slate-500 mt-2">아이디 추가 후 메시지</p>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center text-slate-600 text-sm gap-4">
+            <p>© 2024 NEWTECH CLEARANCE HUB. ALL RIGHTS RESERVED.</p>
+            <p>VAT 별도 금액 / 파격 특가 상품 무상 A/S 미제공</p>
+        </div>
+    </footer>
+
+    <script>
+        const products = [
+            { id: 1, name: "M-토쳐 와이드 풀다운 리어 2", color: "흑색/레드", grade: "기본형", muscle: "등", oldPrice: "3,370,000", price: "1,300,000" },
+            { id: 2, name: "M-토쳐 핵 프레스", color: "흑색", grade: "기본형", muscle: "하체", oldPrice: "4,390,000", price: "2,340,000" },
+            { id: 3, name: "M-토쳐 핵 프레스", color: "백색", grade: "기본형", muscle: "하체", oldPrice: "4,390,000", price: "2,340,000" },
+            { id: 4, name: "M-토쳐 힙 트러스트(회전형)", color: "실버함마톤", grade: "프리미엄(구형)", muscle: "하체", oldPrice: "4,700,000", price: "2,600,000" },
+            { id: 5, name: "M-토쳐 힙 트러스트", color: "실버함마톤", grade: "기본형", muscle: "하체", oldPrice: "2,860,000", price: "1,300,000" },
+            { id: 6, name: "M-토쳐 시티드 체스트 프레스 회전", color: "실버함마톤", grade: "고급형(구형)", muscle: "가슴", oldPrice: "3,680,000", price: "2,340,000" },
+            { id: 7, name: "M-토쳐 오버헤드 익스텐션", color: "흑색/레드", grade: "프리미엄", muscle: "복합", oldPrice: "2,860,000", price: "1,300,000" },
+            { id: 8, name: "M-토쳐 핵 스쿼트", color: "흑색", grade: "프리미엄", muscle: "하체", oldPrice: "4,900,000", price: "2,600,000" },
+            { id: 9, name: "M-토쳐 로우 로우", color: "실버함마톤", grade: "프리미엄", muscle: "등", oldPrice: "3,060,000", price: "2,080,000" },
+            { id: 10, name: "M-토쳐 숄더 프레스", color: "흑색/실버", grade: "프리미엄", muscle: "어깨", oldPrice: "3,570,000", price: "1,820,000" },
+            { id: 11, name: "M-토쳐 벨트 스쿼트", color: "흑색", grade: "구형", muscle: "하체", oldPrice: "4,900,000", price: "2,860,000" },
+            { id: 12, name: "M-토쳐 숄더 프레스", color: "흑색/레드", grade: "프리미엄", muscle: "어깨", oldPrice: "3,570,000", price: "1,820,000" },
+            { id: 13, name: "M-토쳐 파워 레그 프레스", color: "백색", grade: "프리미엄", muscle: "가슴", oldPrice: "6,120,000", price: "2,600,000" },
+            { id: 14, name: "M-토쳐 파워 레그 프레스", color: "실버", grade: "기본형", muscle: "하체", oldPrice: "6,120,000", price: "2,600,000" },
+            { id: 15, name: "어드밴스 랫풀다운(하이풀리)", color: "흑색", grade: "기본형", muscle: "등", oldPrice: "3,270,000", price: "1,950,000" },
+            { id: 16, name: "어드밴스 스탠딩 레터럴 레이즈", color: "흑색/노랑", grade: "고급형", muscle: "어깨", oldPrice: "3,270,000", price: "1,820,000" },
+            { id: 17, name: "온힘 힙 어덕션/어브덕션 콤보", color: "백색", grade: "프리미엄", muscle: "하체", oldPrice: "4,290,000", price: "2,600,000" },
+            { id: 18, name: "온힘 라잉 레그컬", color: "흑색/레드", grade: "기본형", muscle: "하체", oldPrice: "4,290,000", price: "2,600,000" },
+            { id: 19, name: "온힘 숄더 프레스", color: "연한 실버함마톤", grade: "프리미엄", muscle: "어깨", oldPrice: "3,980,000", price: "2,600,000" },
+            { id: 20, name: "온힘 친&딥 어시스트", color: "흑색/레드", grade: "기본형", muscle: "복합", oldPrice: "4,900,000", price: "2,600,000" },
+            { id: 21, name: "유틸리티 벤치", color: "백색", grade: "프리미엄", muscle: "복합", oldPrice: "510,000", price: "300,000" },
+            { id: 22, name: "케이블모션 트라이 케이블", color: "흑색", grade: "기본형", muscle: "복합", oldPrice: "4,490,000", price: "2,600,000" },
+            { id: 23, name: "유틸리티 벤치", color: "백색", grade: "프리미엄", muscle: "복합", oldPrice: "510,000", price: "300,000" },
+            { id: 24, name: "유틸리티 벤치", color: "백색", grade: "프리미엄", muscle: "복합", oldPrice: "510,000", price: "300,000" },
+            { id: 25, name: "유틸리티 벤치", color: "진회색", grade: "프리미엄", muscle: "복합", oldPrice: "510,000", price: "300,000" },
+            { id: 26, name: "로만체어(45~90도)", color: "흑색", grade: "신형", muscle: "복합", oldPrice: "970,000", price: "600,000" },
+            { id: 27, name: "무빙 레그 레이즈", color: "흑색/겨자", grade: "구형", muscle: "복합", oldPrice: "970,000", price: "550,000" },
+            { id: 28, name: "멀티 레터럴 레이즈", color: "흑색", grade: "구형", muscle: "복합", oldPrice: "1,330,000", price: "800,000" },
+            { id: 29, name: "멀티 레터럴 레이즈", color: "흑색", grade: "구형", muscle: "복합", oldPrice: "1,330,000", price: "800,000" },
+            { id: 30, name: "덤벨 정리대(낮은형2단)", color: "실버함마톤", grade: "프리미엄", muscle: "복합", oldPrice: "920,000", price: "550,000" },
+            { id: 31, name: "M-토쳐 시티드 로우", color: "실버함마톤(연한색)", grade: "프리미엄", muscle: "등", oldPrice: "2,860,000", price: "1,700,000" },
+            { id: 32, name: "M-토쳐 펙덱 플라이", color: "흑색/레드", grade: "기본형", muscle: "가슴", oldPrice: "3,170,000", price: "1,850,000" },
+            { id: 33, name: "M-토쳐 핵 스쿼트 프리미엄(콤보형)", color: "갈색", grade: "프리미엄", muscle: "하체", oldPrice: "6,500,000", price: "4,000,000" },
+            { id: 34, name: "M-토쳐 핵 스쿼트 프리미엄(콤보형)", color: "실버함마톤", grade: "프리미엄", muscle: "하체", oldPrice: "6,500,000", price: "4,000,000"  }
+        ];
+
+        const grid = document.getElementById('product-grid');
+        const searchBar = document.getElementById('search-bar');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const preview = document.getElementById('image-preview');
+        const previewImg = document.getElementById('preview-img');
+        const modal = document.getElementById('contact-modal');
+        
+        function openModal() {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function render(items) {
+            grid.innerHTML = items.map(p => {
+                const mainImage = `./images/${p.id}_main.jpg`; 
+                const saleImage = `./images/${p.id}_sale.jpg`;
+
+                return `
+                <div class="product-card bg-white rounded-[2.5rem] overflow-hidden shadow-lg border border-slate-50 flex flex-col">
+                    <div class="h-64 bg-slate-100 relative overflow-hidden group">
+                        <img src="${mainImage}" onerror="this.onerror=null; this.src='https://placehold.co/600x400/f1f5f9/94a3b8?text=이미지+준비중';" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute top-5 left-5 bg-blue-600 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg">NO. ${String(p.id).padStart(2, '0')}</div>
+                        <div class="absolute top-5 right-5 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-black text-slate-800 shadow-sm">${p.muscle}</div>
+                    </div>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <h3 class="text-xl font-extrabold text-slate-900 mb-2 hover:text-blue-600 cursor-help transition-colors preview-trigger leading-tight" data-saleimg="${saleImage}">
+                            ${p.name}
+                        </h3>
+                        <p class="text-sm text-slate-400 mb-8 font-semibold tracking-tight">${p.color} | ${p.grade}</p>
+                        
+                        <div class="mt-auto">
+                            <div class="flex flex-col gap-1 mb-6">
+                                <span class="text-sm font-bold text-slate-400 line-through decoration-slate-300">정상가: ${p.oldPrice}원</span>
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-3xl font-black text-red-500">${p.price}원</span>
+                                    <span class="text-xs font-bold text-white bg-red-500 px-2 py-0.5 rounded shadow-sm">할인가</span>
+                                </div>
+                                <span class="text-[10px] text-slate-400 font-bold mt-1">* VAT 별도 금액</span>
+                            </div>
+                            <button onclick="openModal()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold hover:bg-blue-600 transition-all flex items-center justify-center gap-2 group">
+                                <span>견적 문의하기</span>
+                                <span class="group-hover:translate-x-1 transition-transform">→</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+
+            // Hover logic for Actual Sale Image
+            const triggers = document.querySelectorAll('.preview-trigger');
+            triggers.forEach(el => {
+                el.addEventListener('mouseenter', (e) => {
+                    // 실물 이미지 에러 처리
+                    previewImg.onerror = function() {
+                        this.src = 'https://placehold.co/600x400/f8fafc/94a3b8?text=실물+사진+준비중';
+                    };
+                    previewImg.src = e.target.getAttribute('data-saleimg');
+                    preview.style.display = 'block';
+                });
+                el.addEventListener('mousemove', (e) => {
+                    preview.style.top = (e.clientY + 20) + 'px';
+                    preview.style.left = (e.clientX + 20) + 'px';
+                });
+                el.addEventListener('mouseleave', () => {
+                    preview.style.display = 'none';
+                });
+            });
+        }
+
+        function filter() {
+            const query = searchBar.value.toLowerCase();
+            const category = document.querySelector('.filter-btn.active').dataset.category;
+            
+            const filtered = products.filter(p => {
+                const matchesSearch = p.name.toLowerCase().includes(query);
+                const matchesCategory = category === 'all' || p.muscle === category;
+                return matchesSearch && matchesCategory;
+            });
+            render(filtered);
+        }
+
+        searchBar.addEventListener('input', filter);
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filter();
+            });
+        });
+
+        window.onclick = function(event) {
+            if (event.target == modal) closeModal();
+        }
+
+        window.onload = () => {
+            render(products);
+        };
+    </script>
+</body>
+</html>
