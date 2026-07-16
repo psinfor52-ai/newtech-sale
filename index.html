@@ -36,8 +36,12 @@
             pointer-events: none;
             display: none;
             z-index: 1000;
-            width: 380px;
-            height: 280px;
+            /* 모바일 대응: 최대 너비를 화면에 맞게 조정 */
+            width: 90vw; 
+            max-width: 380px; 
+            /* 가로세로 비율 유지로 변경 */
+            aspect-ratio: 4 / 3; 
+            height: auto; 
             background-color: #fff;
             border: 4px solid #3b82f6;
             border-radius: 1.5rem;
@@ -45,10 +49,23 @@
             box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.4);
         }
 
+        /* 모바일에서는 호버 기능 대신 터치로 동작할 수 있으므로, 
+           작은 화면에서는 팝업 위치를 화면 중앙 하단 등으로 고정하는 것이 좋을 수 있으나, 
+           요청은 이미지 비율 짤림 방지이므로 비율에 집중합니다. */
+        @media (max-width: 768px) {
+             #image-preview {
+                 left: 50% !important;
+                 transform: translateX(-50%);
+                 bottom: 20px;
+                 top: auto !important; /* 마우스 커서 따라다니는 것 무효화 */
+             }
+        }
+
         #image-preview img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* cover에서 contain으로 변경하여 짤림 방지 */
+            background-color: #f1f5f9; /* 여백 부분 배경색 */
         }
 
         .preview-label {
@@ -87,20 +104,35 @@
             text-align: center;
         }
 
+        /* 모바일 모달 여백 조정 */
+        @media (max-width: 640px) {
+            .modal-content {
+                padding: 2rem 1.5rem;
+            }
+        }
+
         .filter-btn.active {
             background-color: #2563eb;
             color: white;
             border-color: #2563eb;
         }
-
-        .chart-container {
-            position: relative;
+        
+        /* 카드 내부 이미지 컨테이너 비율 고정 클래스 (h-64 대체) */
+        .img-container {
             width: 100%;
-            max-width: 500px;
-            margin: 0 auto;
-            height: 250px;
-            max-height: 300px;
+            aspect-ratio: 4 / 3; /* 4:3 비율 고정 */
+            position: relative;
+            overflow: hidden;
+            background-color: #f1f5f9;
         }
+        
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* cover -> contain 변경으로 기구 전체 모습 보장 */
+            padding: 1rem; /* 너무 꽉 차지 않게 여백 추가 */
+        }
+
     </style>
 </head>
 <body>
@@ -114,22 +146,22 @@
     <!-- Inquiry Modal -->
     <div id="contact-modal">
         <div class="modal-content relative">
-            <button onclick="closeModal()" class="absolute top-6 right-8 text-2xl text-gray-400 hover:text-gray-600 transition-colors">✕</button>
-            <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-8">
-                <span class="text-4xl text-blue-600">✉️</span>
+            <button onclick="closeModal()" class="absolute top-4 right-6 sm:top-6 sm:right-8 text-2xl text-gray-400 hover:text-gray-600 transition-colors">✕</button>
+            <div class="w-16 h-16 sm:w-20 sm:h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8">
+                <span class="text-3xl sm:text-4xl text-blue-600">✉️</span>
             </div>
-            <h3 class="text-3xl font-extrabold mb-4 tracking-tight text-slate-900">견적 및 상담 신청</h3>
-            <p class="text-slate-500 leading-relaxed mb-8 font-medium">
+            <h3 class="text-2xl sm:text-3xl font-extrabold mb-4 tracking-tight text-slate-900">견적 및 상담 신청</h3>
+            <p class="text-sm sm:text-base text-slate-500 leading-relaxed mb-8 font-medium">
                 "선택하신 제품의 관리 번호(NO)를 말씀해주시면<br>상세 사진과 최종 견적서를 즉시 보내드립니다."
             </p>
-            <div class="bg-slate-50 p-6 rounded-2xl space-y-4 mb-4 border border-slate-100">
+            <div class="bg-slate-50 p-4 sm:p-6 rounded-2xl space-y-4 mb-4 border border-slate-100">
                 <div class="flex justify-between items-center">
-                    <span class="text-sm text-slate-400 font-bold uppercase tracking-widest">Call Center</span>
-                    <span class="text-2xl font-black text-blue-700">010-3029-1029</span>
+                    <span class="text-xs sm:text-sm text-slate-400 font-bold uppercase tracking-widest">Call Center</span>
+                    <span class="text-xl sm:text-2xl font-black text-blue-700">010-3029-1029</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-sm text-slate-400 font-bold uppercase tracking-widest">Kakao Talk</span>
-                    <span class="text-2xl font-black text-slate-900">ASSISTFITTV</span>
+                    <span class="text-xs sm:text-sm text-slate-400 font-bold uppercase tracking-widest">Kakao Talk</span>
+                    <span class="text-xl sm:text-2xl font-black text-slate-900">ASSISTFITTV</span>
                 </div>
             </div>
             <button onclick="closeModal()" class="w-full mt-6 bg-slate-900 text-white py-4 rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-slate-200">확인했습니다</button>
@@ -137,103 +169,104 @@
     </div>
 
     <!-- Hero Section -->
-    <header class="hero-gradient text-white py-28 px-6 text-center relative overflow-hidden">
+    <header class="hero-gradient text-white py-20 sm:py-28 px-4 sm:px-6 text-center relative overflow-hidden">
         <div class="relative z-10">
-            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-6 py-2 rounded-full border border-white/20 mb-8">
+            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 sm:px-6 py-2 rounded-full border border-white/20 mb-6 sm:mb-8">
                 <span class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
-                <span class="text-sm font-bold tracking-widest">S-GRADE PREMIUM CLEARANCE</span>
+                <span class="text-xs sm:text-sm font-bold tracking-widest">S-GRADE PREMIUM CLEARANCE</span>
             </div>
-            <h1 class="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-none">NEWTECH<br>WAREHOUSE</h1>
-            <p class="text-xl md:text-2xl opacity-80 max-w-3xl mx-auto leading-relaxed font-light">
-                실사용 0회, 엄격한 검수를 마친 뉴텍 정품 34종<br>
-                <span class="font-bold text-white underline decoration-cyan-400 underline-offset-8">전시 특가 단가로 전국 즉시 납품</span> 가능합니다.
+            <h1 class="text-4xl sm:text-6xl md:text-8xl font-black mb-6 sm:mb-8 tracking-tighter leading-none">NEWTECH<br>WAREHOUSE</h1>
+            <p class="text-lg sm:text-xl md:text-2xl opacity-80 max-w-3xl mx-auto leading-relaxed font-light break-keep">
+                실사용 0회, 엄격한 검수를 마친 뉴텍 정품 34종<br class="hidden sm:block">
+                <span class="font-bold text-white underline decoration-cyan-400 underline-offset-8">전시 특가 단가로 즉시 납품</span> 가능합니다.
             </p>
         </div>
         <div class="absolute inset-0 opacity-20 pointer-events-none">
-            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500 rounded-full blur-[120px]"></div>
-            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500 rounded-full blur-[120px]"></div>
+            <div class="absolute top-1/4 left-1/4 w-64 h-64 sm:w-96 sm:h-96 bg-blue-500 rounded-full blur-[80px] sm:blur-[120px]"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-64 h-64 sm:w-96 sm:h-96 bg-cyan-500 rounded-full blur-[80px] sm:blur-[120px]"></div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 -mt-16 relative z-20 pb-32">
+    <main class="max-w-7xl mx-auto px-4 -mt-12 sm:-mt-16 relative z-20 pb-20 sm:pb-32">
         <!-- Policy Summary -->
-        <div class="mb-16">
-            <section class="bg-white rounded-[3rem] shadow-2xl p-10 border border-blue-50 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="flex flex-col items-center text-center p-4 hover:bg-slate-50 rounded-2xl transition-colors">
-                    <div class="text-4xl mb-4">💎</div>
-                    <h3 class="font-bold text-lg mb-2">실사용 0회 S급</h3>
-                    <p class="text-sm text-slate-500 break-keep leading-relaxed">전시 및 단순 반품 제품으로 기능상 완벽한 새 제품입니다.</p>
+        <div class="mb-12 sm:mb-16">
+            <section class="bg-white rounded-3xl sm:rounded-[3rem] shadow-2xl p-6 sm:p-10 border border-blue-50 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
+                <div class="flex flex-col items-center text-center p-2 sm:p-4 hover:bg-slate-50 rounded-2xl transition-colors">
+                    <div class="text-3xl sm:text-4xl mb-2 sm:mb-4">💎</div>
+                    <h3 class="font-bold text-sm sm:text-lg mb-1 sm:mb-2">실사용 0회 S급</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 break-keep leading-relaxed hidden sm:block">전시 및 단순 반품 제품으로 기능상 완벽한 새 제품입니다.</p>
                 </div>
-                <div class="flex flex-col items-center text-center p-4 hover:bg-slate-50 rounded-2xl transition-colors">
-                    <div class="text-4xl mb-4">🚫</div>
-                    <h3 class="font-bold text-lg mb-2">교환/반품 불가</h3>
-                    <p class="text-sm text-slate-500 break-keep leading-relaxed">파격 할인가 적용 상품으로 단순 변심 처리는 불가합니다.</p>
+                <div class="flex flex-col items-center text-center p-2 sm:p-4 hover:bg-slate-50 rounded-2xl transition-colors">
+                    <div class="text-3xl sm:text-4xl mb-2 sm:mb-4">🚫</div>
+                    <h3 class="font-bold text-sm sm:text-lg mb-1 sm:mb-2">교환/반품 불가</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 break-keep leading-relaxed hidden sm:block">파격 할인가 적용 상품으로 단순 변심 처리는 불가합니다.</p>
                 </div>
-                <div class="flex flex-col items-center text-center p-4 hover:bg-slate-50 rounded-2xl transition-colors">
-                    <div class="text-4xl mb-4">⚙️</div>
-                    <h3 class="font-bold text-lg mb-2">미세 흠집 양해</h3>
-                    <p class="text-sm text-slate-500 break-keep leading-relaxed">전시 과정의 미세 흠집이 있을 수 있으나 실사용엔 무관합니다.</p>
+                <div class="flex flex-col items-center text-center p-2 sm:p-4 hover:bg-slate-50 rounded-2xl transition-colors">
+                    <div class="text-3xl sm:text-4xl mb-2 sm:mb-4">⚙️</div>
+                    <h3 class="font-bold text-sm sm:text-lg mb-1 sm:mb-2">미세 흠집 양해</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 break-keep leading-relaxed hidden sm:block">전시 과정의 미세 흠집이 있을 수 있으나 실사용엔 무관합니다.</p>
                 </div>
-                <div class="flex flex-col items-center text-center p-4 hover:bg-slate-50 rounded-2xl transition-colors">
-                    <div class="text-4xl mb-4">🚚</div>
-                    <h3 class="font-bold text-lg mb-2">배송비 추후안내</h3>
-                    <p class="text-sm text-slate-500 break-keep leading-relaxed">지역 및 수량에 따라 납품 및 설치 비용은 개별 통보됩니다.</p>
+                <div class="flex flex-col items-center text-center p-2 sm:p-4 hover:bg-slate-50 rounded-2xl transition-colors">
+                    <div class="text-3xl sm:text-4xl mb-2 sm:mb-4">🚚</div>
+                    <h3 class="font-bold text-sm sm:text-lg mb-1 sm:mb-2">배송비 추후안내</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 break-keep leading-relaxed hidden sm:block">지역 및 수량에 따라 납품 및 설치 비용은 개별 통보됩니다.</p>
                 </div>
             </section>
         </div>
 
         <!-- Search & Interaction Info -->
-        <section class="mb-12">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-4">
-                <div id="filter-container" class="flex flex-wrap gap-2">
-                    <button class="filter-btn active px-6 py-2.5 rounded-2xl border-2 border-slate-200 font-bold transition-all" data-category="all">전체보기</button>
-                    <button class="filter-btn px-6 py-2.5 rounded-2xl border-2 border-slate-200 font-bold transition-all" data-category="등">등</button>
-                    <button class="filter-btn px-6 py-2.5 rounded-2xl border-2 border-slate-200 font-bold transition-all" data-category="하체">하체</button>
-                    <button class="filter-btn px-6 py-2.5 rounded-2xl border-2 border-slate-200 font-bold transition-all" data-category="가슴">가슴</button>
-                    <button class="filter-btn px-6 py-2.5 rounded-2xl border-2 border-slate-200 font-bold transition-all" data-category="어깨">어깨</button>
-                    <button class="filter-btn px-6 py-2.5 rounded-2xl border-2 border-slate-200 font-bold transition-all" data-category="복합">복합/기타</button>
+        <section class="mb-8 sm:mb-12">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-8 mb-4">
+                <!-- 모바일에서는 가로 스크롤 허용 -->
+                <div id="filter-container" class="flex flex-row md:flex-wrap gap-2 overflow-x-auto pb-2 md:pb-0 hide-scrollbar" style="-webkit-overflow-scrolling: touch; scrollbar-width: none;">
+                    <button class="filter-btn active whitespace-nowrap px-4 sm:px-6 py-2 sm:py-2.5 rounded-2xl border-2 border-slate-200 text-sm sm:text-base font-bold transition-all" data-category="all">전체보기</button>
+                    <button class="filter-btn whitespace-nowrap px-4 sm:px-6 py-2 sm:py-2.5 rounded-2xl border-2 border-slate-200 text-sm sm:text-base font-bold transition-all" data-category="등">등</button>
+                    <button class="filter-btn whitespace-nowrap px-4 sm:px-6 py-2 sm:py-2.5 rounded-2xl border-2 border-slate-200 text-sm sm:text-base font-bold transition-all" data-category="하체">하체</button>
+                    <button class="filter-btn whitespace-nowrap px-4 sm:px-6 py-2 sm:py-2.5 rounded-2xl border-2 border-slate-200 text-sm sm:text-base font-bold transition-all" data-category="가슴">가슴</button>
+                    <button class="filter-btn whitespace-nowrap px-4 sm:px-6 py-2 sm:py-2.5 rounded-2xl border-2 border-slate-200 text-sm sm:text-base font-bold transition-all" data-category="어깨">어깨</button>
+                    <button class="filter-btn whitespace-nowrap px-4 sm:px-6 py-2 sm:py-2.5 rounded-2xl border-2 border-slate-200 text-sm sm:text-base font-bold transition-all" data-category="복합">복합/기타</button>
                 </div>
                 <div class="relative w-full md:w-96">
-                    <input type="text" id="search-bar" placeholder="찾으시는 기구명을 입력하세요..." class="w-full px-6 py-4 rounded-2xl border-2 border-slate-100 focus:border-blue-500 focus:outline-none shadow-sm transition-all font-medium">
+                    <input type="text" id="search-bar" placeholder="기구명을 입력하세요..." class="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-2xl border-2 border-slate-100 focus:border-blue-500 focus:outline-none shadow-sm transition-all text-sm sm:text-base font-medium">
                 </div>
             </div>
-            <p class="text-sm text-blue-500 font-bold flex items-center gap-2">
-                <span class="inline-block w-5 h-5 bg-blue-100 text-center rounded-full text-xs leading-5">i</span>
-                기구 이름에 마우스 커서를 올리면 '실물 상태 사진'을 즉시 확인할 수 있습니다.
+            <p class="text-xs sm:text-sm text-blue-500 font-bold flex items-center gap-2">
+                <span class="inline-block w-4 h-4 sm:w-5 sm:h-5 bg-blue-100 text-center rounded-full text-[10px] sm:text-xs leading-4 sm:leading-5 shrink-0">i</span>
+                <span class="break-keep">기구 이름(파란색 글씨)을 길게 누르거나 마우스를 올리면 실물 사진을 확인할 수 있습니다.</span>
             </p>
         </section>
 
         <!-- Product Grid -->
-        <section id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <section id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
             <!-- Populated via JS -->
         </section>
 
     </main>
 
-    <footer class="bg-slate-900 text-white py-24 px-6">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12">
+    <footer class="bg-slate-900 text-white py-16 sm:py-24 px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-start gap-12">
             <div class="max-w-lg">
-                <h2 class="text-4xl font-extrabold mb-6 text-blue-400 italic italic tracking-tighter">NEWTECH PRE-OWNED</h2>
-                <p class="text-slate-400 text-lg leading-relaxed font-medium">
-                    뉴텍 프리미엄 기구와 함께 귀하의 센터를 완성하세요.<br>
-                    본 페이지에 게재된 모든 품목은 검수가 완료된 실제 매물입니다.<br>
+                <h2 class="text-3xl sm:text-4xl font-extrabold mb-4 sm:mb-6 text-blue-400 italic tracking-tighter">NEWTECH PRE-OWNED</h2>
+                <p class="text-slate-400 text-base sm:text-lg leading-relaxed font-medium break-keep">
+                    뉴텍 프리미엄 기구와 함께 귀하의 센터를 완성하세요.<br class="hidden sm:block">
+                    본 페이지에 게재된 모든 품목은 검수가 완료된 실제 매물입니다.<br class="hidden sm:block">
                     상세 견적 및 설치 일정 문의는 아래 채널로 연락 부탁드립니다.
                 </p>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-10 w-full md:w-auto">
-                <div class="flex flex-col">
-                    <span class="text-xs text-slate-500 uppercase font-black tracking-[0.2em] mb-3">📞 Direct Call</span>
-                    <p class="text-3xl font-black text-white">010-3029-1029</p>
-                    <p class="text-sm text-slate-500 mt-2">평일/주말 상담 가능</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-10 w-full lg:w-auto">
+                <div class="flex flex-col bg-slate-800/50 p-6 rounded-3xl">
+                    <span class="text-[10px] sm:text-xs text-slate-400 uppercase font-black tracking-[0.2em] mb-2 sm:mb-3 flex items-center gap-2"><span class="text-lg">📞</span> Direct Call</span>
+                    <a href="tel:010-3029-1029" class="text-2xl sm:text-3xl font-black text-white hover:text-blue-400 transition-colors">010-3029-1029</a>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-2">평일/주말 상담 가능</p>
                 </div>
-                <div class="flex flex-col">
-                    <span class="text-xs text-slate-500 uppercase font-black tracking-[0.2em] mb-3">💬 Kakao Messenger</span>
-                    <p class="text-3xl font-black text-white">ASSISTFITTV</p>
-                    <p class="text-sm text-slate-500 mt-2">아이디 추가 후 메시지</p>
+                <div class="flex flex-col bg-slate-800/50 p-6 rounded-3xl">
+                    <span class="text-[10px] sm:text-xs text-slate-400 uppercase font-black tracking-[0.2em] mb-2 sm:mb-3 flex items-center gap-2"><span class="text-lg">💬</span> Kakao Messenger</span>
+                    <p class="text-2xl sm:text-3xl font-black text-white">ASSISTFITTV</p>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-2">아이디 추가 후 메시지</p>
                 </div>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center text-slate-600 text-sm gap-4">
+        <div class="max-w-7xl mx-auto mt-16 sm:mt-20 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center text-slate-600 text-xs sm:text-sm gap-2 sm:gap-4 text-center md:text-left">
             <p>© 2024 NEWTECH CLEARANCE HUB. ALL RIGHTS RESERVED.</p>
             <p>VAT 별도 금액 / 파격 특가 상품 무상 A/S 미제공</p>
         </div>
@@ -253,7 +286,7 @@
             { id: 10, name: "M-토쳐 숄더 프레스", color: "흑색/실버", grade: "프리미엄", muscle: "어깨", oldPrice: "3,570,000", price: "1,820,000" },
             { id: 11, name: "M-토쳐 벨트 스쿼트", color: "흑색", grade: "구형", muscle: "하체", oldPrice: "4,900,000", price: "2,860,000" },
             { id: 12, name: "M-토쳐 숄더 프레스", color: "흑색/레드", grade: "프리미엄", muscle: "어깨", oldPrice: "3,570,000", price: "1,820,000" },
-            { id: 13, name: "M-토쳐 파워 레그 프레스", color: "백색", grade: "기본형", muscle: "하체", oldPrice: "6,120,000", price: "2,600,000" },
+            { id: 13, name: "M-토쳐 파워 레그 프레스", color: "백색", grade: "프리미엄", muscle: "하체", oldPrice: "6,120,000", price: "2,600,000" },
             { id: 14, name: "M-토쳐 파워 레그 프레스", color: "실버", grade: "기본형", muscle: "하체", oldPrice: "6,120,000", price: "2,600,000" },
             { id: 15, name: "어드밴스 랫풀다운(하이풀리)", color: "흑색", grade: "기본형", muscle: "등", oldPrice: "3,270,000", price: "1,950,000" },
             { id: 16, name: "어드밴스 스탠딩 레터럴 레이즈", color: "흑색/노랑", grade: "고급형", muscle: "어깨", oldPrice: "3,270,000", price: "1,820,000" },
@@ -300,28 +333,28 @@
                 const saleImage = `./images/${p.id}_sale.jpg`;
 
                 return `
-                <div class="product-card bg-white rounded-[2.5rem] overflow-hidden shadow-lg border border-slate-50 flex flex-col">
-                    <div class="h-64 bg-slate-100 relative overflow-hidden group">
-                        <img src="${mainImage}" onerror="this.onerror=null; this.src='https://placehold.co/600x400/f1f5f9/94a3b8?text=이미지+준비중';" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        <div class="absolute top-5 left-5 bg-blue-600 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg">NO. ${String(p.id).padStart(2, '0')}</div>
-                        <div class="absolute top-5 right-5 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-black text-slate-800 shadow-sm">${p.muscle}</div>
+                <div class="product-card bg-white rounded-3xl sm:rounded-[2.5rem] overflow-hidden shadow-lg border border-slate-50 flex flex-col">
+                    <div class="img-container group">
+                        <img src="${mainImage}" onerror="this.onerror=null; this.src='https://placehold.co/600x450/f1f5f9/94a3b8?text=이미지+준비중';" alt="${p.name}" class="transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute top-4 left-4 bg-blue-600 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg z-10">NO. ${String(p.id).padStart(2, '0')}</div>
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-black text-slate-800 shadow-sm z-10">${p.muscle}</div>
                     </div>
-                    <div class="p-8 flex flex-col flex-grow">
-                        <h3 class="text-xl font-extrabold text-slate-900 mb-2 hover:text-blue-600 cursor-help transition-colors preview-trigger leading-tight" data-saleimg="${saleImage}">
+                    <div class="p-6 sm:p-8 flex flex-col flex-grow">
+                        <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 mb-2 hover:text-blue-600 cursor-pointer transition-colors preview-trigger leading-tight underline decoration-blue-200 underline-offset-4" data-saleimg="${saleImage}">
                             ${p.name}
                         </h3>
-                        <p class="text-sm text-slate-400 mb-8 font-semibold tracking-tight">${p.color} | ${p.grade}</p>
+                        <p class="text-xs sm:text-sm text-slate-400 mb-6 sm:mb-8 font-semibold tracking-tight">${p.color} | ${p.grade}</p>
                         
                         <div class="mt-auto">
-                            <div class="flex flex-col gap-1 mb-6">
-                                <span class="text-sm font-bold text-slate-400 line-through decoration-slate-300">정상가: ${p.oldPrice}원</span>
-                                <div class="flex items-baseline gap-2">
-                                    <span class="text-3xl font-black text-red-500">${p.price}원</span>
-                                    <span class="text-xs font-bold text-white bg-red-500 px-2 py-0.5 rounded shadow-sm">할인가</span>
+                            <div class="flex flex-col gap-1 mb-5 sm:mb-6">
+                                <span class="text-xs sm:text-sm font-bold text-slate-400 line-through decoration-slate-300">정상가: ${p.oldPrice}원</span>
+                                <div class="flex items-baseline gap-2 flex-wrap">
+                                    <span class="text-2xl sm:text-3xl font-black text-red-500 break-all">${p.price}원</span>
+                                    <span class="text-[10px] sm:text-xs font-bold text-white bg-red-500 px-2 py-0.5 rounded shadow-sm whitespace-nowrap">할인가</span>
                                 </div>
                                 <span class="text-[10px] text-slate-400 font-bold mt-1">* VAT 별도 금액</span>
                             </div>
-                            <button onclick="openModal()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold hover:bg-blue-600 transition-all flex items-center justify-center gap-2 group">
+                            <button onclick="openModal()" class="w-full bg-slate-900 text-white py-3 sm:py-4 rounded-xl sm:rounded-2xl text-sm sm:text-base font-bold hover:bg-blue-600 transition-all flex items-center justify-center gap-2 group">
                                 <span>견적 문의하기</span>
                                 <span class="group-hover:translate-x-1 transition-transform">→</span>
                             </button>
@@ -330,23 +363,50 @@
                 </div>
             `}).join('');
 
-            // Hover logic for Actual Sale Image
+            // Hover & Touch logic for Actual Sale Image
             const triggers = document.querySelectorAll('.preview-trigger');
             triggers.forEach(el => {
+                // Desktop Hover
                 el.addEventListener('mouseenter', (e) => {
-                    // 실물 이미지 에러 처리
-                    previewImg.onerror = function() {
-                        this.src = 'https://placehold.co/600x400/f8fafc/94a3b8?text=실물+사진+준비중';
-                    };
-                    previewImg.src = e.target.getAttribute('data-saleimg');
-                    preview.style.display = 'block';
+                    if (window.innerWidth > 768) {
+                        previewImg.onerror = function() {
+                            this.src = 'https://placehold.co/600x450/f8fafc/94a3b8?text=실물+사진+준비중';
+                        };
+                        previewImg.src = e.target.getAttribute('data-saleimg');
+                        preview.style.display = 'block';
+                    }
                 });
                 el.addEventListener('mousemove', (e) => {
-                    preview.style.top = (e.clientY + 20) + 'px';
-                    preview.style.left = (e.clientX + 20) + 'px';
+                    if (window.innerWidth > 768) {
+                        preview.style.top = (e.clientY + 20) + 'px';
+                        preview.style.left = (e.clientX + 20) + 'px';
+                    }
                 });
                 el.addEventListener('mouseleave', () => {
-                    preview.style.display = 'none';
+                    if (window.innerWidth > 768) {
+                        preview.style.display = 'none';
+                    }
+                });
+
+                // Mobile Touch (꾹 누르거나 탭)
+                el.addEventListener('touchstart', (e) => {
+                    if (window.innerWidth <= 768) {
+                        // Prevent default behavior if needed, but might interfere with scrolling if not careful
+                        previewImg.onerror = function() {
+                            this.src = 'https://placehold.co/600x450/f8fafc/94a3b8?text=실물+사진+준비중';
+                        };
+                        previewImg.src = e.target.getAttribute('data-saleimg');
+                        preview.style.display = 'block';
+                    }
+                }, {passive: true});
+                
+                el.addEventListener('touchend', (e) => {
+                     if (window.innerWidth <= 768) {
+                        // 약간의 딜레이 후 사라지게 하거나 화면 탭 시 사라지게 처리
+                        setTimeout(() => {
+                            preview.style.display = 'none';
+                        }, 2000); // 2초 후 닫힘
+                     }
                 });
             });
         }
