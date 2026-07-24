@@ -126,17 +126,23 @@
         }
 
         .sold-out-stamp {
-            border: 4px solid #ef4444;
+            border: 3px solid #ef4444;
             color: #ef4444;
             font-weight: 900;
-            font-size: 2.5rem;
-            padding: 0.5rem 1.5rem;
+            font-size: 1.5rem;
+            padding: 0.4rem 1.2rem;
             transform: rotate(-15deg);
             letter-spacing: 0.1em;
-            background-color: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             pointer-events: none;
+        }
+
+        @media (min-width: 640px) {
+            .sold-out-stamp {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
@@ -275,40 +281,40 @@
         // 기구가 팔리면 아래 목록에서 해당 기구의 soldOut: false 부분을 soldOut: true 로만 변경하고 저장(Commit)하시면 됩니다!
         
         const products = [
-            { id: 1, name: "M-토쳐 와이드 풀다운 리어 2", color: "흑색/레드", grade: "기본형", muscle: "등", oldPrice: "3,370,000", price: "1,400,000", soldOut: true },
-            { id: 2, name: "M-토쳐 핵 프레스", color: "흑색", grade: "기본형", muscle: "하체", oldPrice: "4,390,000", price: "2,440,000", soldOut: true },
-            { id: 3, name: "M-토쳐 핵 프레스", color: "백색", grade: "기본형", muscle: "하체", oldPrice: "4,390,000", price: "2,440,000", soldOut: true },
-            { id: 4, name: "M-토쳐 힙 트러스트(회전형)", color: "실버함마톤", grade: "프리미엄(구형)", muscle: "하체", oldPrice: "4,700,000", price: "2,700,000", soldOut: true },
+            { id: 1, name: "M-토쳐 와이드 풀다운 리어 2", color: "흑색/레드", grade: "기본형", muscle: "등", oldPrice: "3,370,000", price: "1,300,000", soldOut: false },
+            { id: 2, name: "M-토쳐 핵 프레스", color: "흑색", grade: "기본형", muscle: "하체", oldPrice: "4,390,000", price: "2,340,000", soldOut: false },
+            { id: 3, name: "M-토쳐 핵 프레스", color: "백색", grade: "기본형", muscle: "하체", oldPrice: "4,390,000", price: "2,340,000", soldOut: false },
+            { id: 4, name: "M-토쳐 힙 트러스트(회전형)", color: "실버함마톤", grade: "프리미엄(구형)", muscle: "하체", oldPrice: "4,700,000", price: "2,600,000", soldOut: false },
             { id: 5, name: "M-토쳐 힙 트러스트", color: "실버함마톤", grade: "기본형", muscle: "하체", oldPrice: "2,860,000", price: "1,300,000", soldOut: false },
-            { id: 6, name: "M-토쳐 시티드 체스트 프레스 회전", color: "실버함마톤", grade: "고급형(구형)", muscle: "가슴", oldPrice: "3,680,000", price: "2,440,000", soldOut: true },
-            { id: 7, name: "M-토쳐 오버헤드 익스텐션", color: "흑색/레드", grade: "프리미엄", muscle: "복합", oldPrice: "2,860,000", price: "1,400,000", soldOut: true },
-            { id: 8, name: "M-토쳐 핵 스쿼트", color: "흑색", grade: "프리미엄", muscle: "하체", oldPrice: "4,900,000", price: "2,700,000", soldOut: false },
-            { id: 9, name: "M-토쳐 로우 로우", color: "실버함마톤", grade: "프리미엄", muscle: "등", oldPrice: "3,060,000", price: "2,180,000", soldOut: false },
-            { id: 10, name: "M-토쳐 숄더 프레스", color: "흑색/실버", grade: "프리미엄", muscle: "어깨", oldPrice: "3,570,000", price: "1,920,000", soldOut: false },
-            { id: 11, name: "M-토쳐 벨트 스쿼트", color: "흑색", grade: "구형", muscle: "하체", oldPrice: "4,900,000", price: "2,960,000", soldOut: false },
-            { id: 12, name: "M-토쳐 숄더 프레스", color: "흑색/레드", grade: "프리미엄", muscle: "어깨", oldPrice: "3,570,000", price: "1,920,000", soldOut: true },
-            { id: 13, name: "M-토쳐 파워 레그 프레스", color: "백색", grade: "프리미엄", muscle: "하체", oldPrice: "6,120,000", price: "2,700,000", soldOut: true },
-            { id: 14, name: "M-토쳐 파워 레그 프레스", color: "실버", grade: "기본형", muscle: "하체", oldPrice: "6,120,000", price: "2,700,000", soldOut: true },
-            { id: 15, name: "어드밴스 랫풀다운(하이풀리)", color: "흑색", grade: "기본형", muscle: "등", oldPrice: "3,270,000", price: "2,050,000", soldOut: false },
-            { id: 16, name: "어드밴스 스탠딩 레터럴 레이즈", color: "흑색/노랑", grade: "고급형", muscle: "어깨", oldPrice: "3,270,000", price: "1,920,000", soldOut: true },
-            { id: 17, name: "온힘 힙 어덕션/어브덕션 콤보", color: "백색", grade: "프리미엄", muscle: "하체", oldPrice: "4,290,000", price: "2,700,000", soldOut: true },
-            { id: 18, name: "온힘 라잉 레그컬", color: "흑색/레드", grade: "기본형", muscle: "하체", oldPrice: "4,290,000", price: "2,700,000", soldOut: true },
-            { id: 19, name: "온힘 숄더 프레스", color: "연한 실버함마톤", grade: "프리미엄", muscle: "어깨", oldPrice: "3,980,000", price: "2,700,000", soldOut: true },
-            { id: 20, name: "온힘 친&딥 어시스트", color: "흑색/레드", grade: "기본형", muscle: "복합", oldPrice: "4,900,000", price: "2,700,000", soldOut: false },
-            { id: 21, name: "유틸리티 벤치", color: "백색", grade: "프리미엄", muscle: "복합", oldPrice: "510,000", price: "400,000", soldOut: false },
-            { id: 22, name: "케이블모션 트라이 케이블", color: "흑색", grade: "기본형", muscle: "복합", oldPrice: "4,490,000", price: "2,700,000", soldOut: true },
-            { id: 23, name: "유틸리티 벤치", color: "백색", grade: "프리미엄", muscle: "복합", oldPrice: "510,000", price: "400,000", soldOut: false },
-            { id: 24, name: "유틸리티 벤치", color: "백색", grade: "프리미엄", muscle: "복합", oldPrice: "510,000", price: "400,000", soldOut: false },
-            { id: 25, name: "유틸리티 벤치", color: "진회색", grade: "프리미엄", muscle: "복합", oldPrice: "510,000", price: "400,000", soldOut: false },
-            { id: 26, name: "로만체어(45~90도)", color: "흑색", grade: "신형", muscle: "복합", oldPrice: "970,000", price: "700,000", soldOut: true },
-            { id: 27, name: "무빙 레그 레이즈", color: "흑색/겨자", grade: "구형", muscle: "복합", oldPrice: "970,000", price: "650,000", soldOut: false },
-            { id: 28, name: "멀티 레터럴 레이즈", color: "흑색", grade: "구형", muscle: "복합", oldPrice: "1,330,000", price: "900,000", soldOut: false },
-            { id: 29, name: "멀티 레터럴 레이즈", color: "흑색", grade: "구형", muscle: "복합", oldPrice: "1,330,000", price: "900,000", soldOut: false },
-            { id: 30, name: "덤벨 정리대(낮은형2단)", color: "실버함마톤", grade: "프리미엄", muscle: "복합", oldPrice: "920,000", price: "650,000", soldOut: false },
-            { id: 31, name: "M-토쳐 시티드 로우", color: "실버함마톤(연한색)", grade: "프리미엄", muscle: "등", oldPrice: "2,860,000", price: "1,800,000", soldOut: true },
-            { id: 32, name: "M-토쳐 펙덱 플라이", color: "흑색/레드", grade: "기본형", muscle: "가슴", oldPrice: "3,170,000", price: "1,950,000", soldOut: true },
-            { id: 33, name: "M-토쳐 핵 스쿼트 프리미엄(콤보형)", color: "갈색", grade: "프리미엄", muscle: "하체", oldPrice: "6,500,000", price: "4,100,000", soldOut: true },
-            { id: 34, name: "M-토쳐 핵 스쿼트 프리미엄(콤보형)", color: "실버함마톤", grade: "프리미엄", muscle: "하체", oldPrice: "6,500,000", price: "4,100,000", soldOut: true }
+            { id: 6, name: "M-토쳐 시티드 체스트 프레스 회전", color: "실버함마톤", grade: "고급형(구형)", muscle: "가슴", oldPrice: "3,680,000", price: "2,340,000", soldOut: false },
+            { id: 7, name: "M-토쳐 오버헤드 익스텐션", color: "흑색/레드", grade: "프리미엄", muscle: "복합", oldPrice: "2,860,000", price: "1,300,000", soldOut: false },
+            { id: 8, name: "M-토쳐 핵 스쿼트", color: "흑색", grade: "프리미엄", muscle: "하체", oldPrice: "4,900,000", price: "2,600,000", soldOut: false },
+            { id: 9, name: "M-토쳐 로우 로우", color: "실버함마톤", grade: "프리미엄", muscle: "등", oldPrice: "3,060,000", price: "2,080,000", soldOut: false },
+            { id: 10, name: "M-토쳐 숄더 프레스", color: "흑색/실버", grade: "프리미엄", muscle: "어깨", oldPrice: "3,570,000", price: "1,820,000", soldOut: false },
+            { id: 11, name: "M-토쳐 벨트 스쿼트", color: "흑색", grade: "구형", muscle: "하체", oldPrice: "4,900,000", price: "2,860,000", soldOut: false },
+            { id: 12, name: "M-토쳐 숄더 프레스", color: "흑색/레드", grade: "프리미엄", muscle: "어깨", oldPrice: "3,570,000", price: "1,820,000", soldOut: false },
+            { id: 13, name: "M-토쳐 파워 레그 프레스", color: "백색", grade: "프리미엄", muscle: "하체", oldPrice: "6,120,000", price: "2,600,000", soldOut: false },
+            { id: 14, name: "M-토쳐 파워 레그 프레스", color: "실버", grade: "기본형", muscle: "하체", oldPrice: "6,120,000", price: "2,600,000", soldOut: false },
+            { id: 15, name: "어드밴스 랫풀다운(하이풀리)", color: "흑색", grade: "기본형", muscle: "등", oldPrice: "3,270,000", price: "1,950,000", soldOut: false },
+            { id: 16, name: "어드밴스 스탠딩 레터럴 레이즈", color: "흑색/노랑", grade: "고급형", muscle: "어깨", oldPrice: "3,270,000", price: "1,820,000", soldOut: false },
+            { id: 17, name: "온힘 힙 어덕션/어브덕션 콤보", color: "백색", grade: "프리미엄", muscle: "하체", oldPrice: "4,290,000", price: "2,600,000", soldOut: false },
+            { id: 18, name: "온힘 라잉 레그컬", color: "흑색/레드", grade: "기본형", muscle: "하체", oldPrice: "4,290,000", price: "2,600,000", soldOut: false },
+            { id: 19, name: "온힘 숄더 프레스", color: "연한 실버함마톤", grade: "프리미엄", muscle: "어깨", oldPrice: "3,980,000", price: "2,600,000", soldOut: false },
+            { id: 20, name: "온힘 친&딥 어시스트", color: "흑색/레드", grade: "기본형", muscle: "복합", oldPrice: "4,900,000", price: "2,600,000", soldOut: false },
+            { id: 21, name: "유틸리티 벤치", color: "백색", grade: "프리미엄", muscle: "복합", oldPrice: "510,000", price: "300,000", soldOut: false },
+            { id: 22, name: "케이블모션 트라이 케이블", color: "흑색", grade: "기본형", muscle: "복합", oldPrice: "4,490,000", price: "2,600,000", soldOut: false },
+            { id: 23, name: "유틸리티 벤치", color: "백색", grade: "프리미엄", muscle: "복합", oldPrice: "510,000", price: "300,000", soldOut: false },
+            { id: 24, name: "유틸리티 벤치", color: "백색", grade: "프리미엄", muscle: "복합", oldPrice: "510,000", price: "300,000", soldOut: false },
+            { id: 25, name: "유틸리티 벤치", color: "진회색", grade: "프리미엄", muscle: "복합", oldPrice: "510,000", price: "300,000", soldOut: false },
+            { id: 26, name: "로만체어(45~90도)", color: "흑색", grade: "신형", muscle: "복합", oldPrice: "970,000", price: "600,000", soldOut: false },
+            { id: 27, name: "무빙 레그 레이즈", color: "흑색/겨자", grade: "구형", muscle: "복합", oldPrice: "970,000", price: "550,000", soldOut: false },
+            { id: 28, name: "멀티 레터럴 레이즈", color: "흑색", grade: "구형", muscle: "복합", oldPrice: "1,330,000", price: "800,000", soldOut: false },
+            { id: 29, name: "멀티 레터럴 레이즈", color: "흑색", grade: "구형", muscle: "복합", oldPrice: "1,330,000", price: "800,000", soldOut: false },
+            { id: 30, name: "덤벨 정리대(낮은형2단)", color: "실버함마톤", grade: "프리미엄", muscle: "복합", oldPrice: "920,000", price: "550,000", soldOut: false },
+            { id: 31, name: "M-토쳐 시티드 로우", color: "실버함마톤(연한색)", grade: "프리미엄", muscle: "등", oldPrice: "2,860,000", price: "1,700,000", soldOut: false },
+            { id: 32, name: "M-토쳐 펙덱 플라이", color: "흑색/레드", grade: "기본형", muscle: "가슴", oldPrice: "3,170,000", price: "1,850,000", soldOut: false },
+            { id: 33, name: "M-토쳐 핵 스쿼트 프리미엄(콤보형)", color: "갈색", grade: "프리미엄", muscle: "하체", oldPrice: "6,500,000", price: "4,000,000", soldOut: false },
+            { id: 34, name: "M-토쳐 핵 스쿼트 프리미엄(콤보형)", color: "실버함마톤", grade: "프리미엄", muscle: "하체", oldPrice: "6,500,000", price: "4,000,000", soldOut: false }
         ];
 
         const grid = document.getElementById('product-grid');
@@ -337,13 +343,13 @@
                 <div class="product-card bg-white rounded-3xl sm:rounded-[2.5rem] overflow-hidden shadow-lg border border-slate-50 flex flex-col relative">
                     
                     ${p.soldOut ? `
-                        <div class="absolute inset-0 bg-slate-900/40 z-20 flex flex-col items-center justify-center backdrop-blur-[2px] rounded-3xl sm:rounded-[2.5rem]">
+                        <div class="absolute inset-0 bg-black/10 z-20 flex flex-col items-center justify-center rounded-3xl sm:rounded-[2.5rem] pointer-events-none">
                             <div class="sold-out-stamp">SOLD OUT</div>
                         </div>
                     ` : ''}
 
                     <div class="img-container group">
-                        <img src="${mainImage}" onerror="this.onerror=null; this.src='https://placehold.co/600x450/f1f5f9/94a3b8?text=이미지+준비중';" alt="${p.name}" class="transition-transform duration-700 group-hover:scale-105 ${p.soldOut ? 'grayscale opacity-60' : ''}">
+                        <img src="${mainImage}" onerror="this.onerror=null; this.src='https://placehold.co/600x450/f1f5f9/94a3b8?text=이미지+준비중';" alt="${p.name}" class="transition-transform duration-700 group-hover:scale-105 ${p.soldOut ? 'grayscale opacity-80' : ''}">
                         <div class="absolute top-4 left-4 bg-blue-600 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg z-10">NO. ${String(p.id).padStart(2, '0')}</div>
                         <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-black text-slate-800 shadow-sm z-10">${p.muscle}</div>
                     </div>
