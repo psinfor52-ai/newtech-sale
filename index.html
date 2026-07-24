@@ -30,6 +30,34 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
         }
 
+        /* 모바일 최적화 반응형 썸네일 */
+        .img-container {
+            width: 100%;
+            aspect-ratio: 4 / 3; 
+            position: relative;
+            overflow: hidden;
+            background-color: #f1f5f9;
+        }
+        
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; 
+            padding: 1rem; 
+        }
+
+        /* 판매완료 스탬프 스타일 (새로운 버전) */
+        .sold-out-stamp {
+            border: 2px solid #ef4444;
+            color: #ef4444;
+            font-weight: 900;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(2px);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            letter-spacing: 0.05em;
+        }
+
         #image-preview {
             position: fixed;
             pointer-events: none;
@@ -75,7 +103,8 @@
             font-weight: 700;
         }
 
-        #contact-modal {
+        /* 모달 스타일 공통 */
+        .modal-overlay {
             display: none;
             position: fixed;
             top: 0;
@@ -110,52 +139,20 @@
             border-color: #2563eb;
         }
         
-        .img-container {
-            width: 100%;
-            aspect-ratio: 4 / 3; 
-            position: relative;
-            overflow: hidden;
-            background-color: #f1f5f9;
-        }
-        
-        .img-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; 
-            padding: 1rem; 
-        }
-
-        .sold-out-stamp {
-            border: 3px solid #ef4444;
-            color: #ef4444;
-            font-weight: 900;
-            font-size: 1.5rem;
-            padding: 0.4rem 1.2rem;
-            transform: rotate(-15deg);
-            letter-spacing: 0.1em;
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(2px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            pointer-events: none;
-        }
-
-        @media (min-width: 640px) {
-            .sold-out-stamp {
-                font-size: 1.8rem;
-            }
-        }
     </style>
 </head>
 <body>
 
+    <!-- 이미지 미리보기 -->
     <div id="image-preview">
         <img id="preview-img" src="" alt="실물 이미지">
         <div class="preview-label">실제 판매 상품 촬영 이미지 (현 상태)</div>
     </div>
 
-    <div id="contact-modal">
+    <!-- 일반 고객 문의 모달 -->
+    <div id="contact-modal" class="modal-overlay">
         <div class="modal-content relative">
-            <button onclick="closeModal()" class="absolute top-4 right-6 sm:top-6 sm:right-8 text-2xl text-gray-400 hover:text-gray-600 transition-colors">✕</button>
+            <button onclick="closeModal('contact-modal')" class="absolute top-4 right-6 sm:top-6 sm:right-8 text-2xl text-gray-400 hover:text-gray-600 transition-colors">✕</button>
             <div class="w-16 h-16 sm:w-20 sm:h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8">
                 <span class="text-3xl sm:text-4xl text-blue-600">✉️</span>
             </div>
@@ -173,13 +170,14 @@
                     <span class="text-xl sm:text-2xl font-black text-slate-900">ASSISTFITTV</span>
                 </div>
             </div>
-            <button onclick="closeModal()" class="w-full mt-6 bg-slate-900 text-white py-4 rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-slate-200">확인했습니다</button>
+            <button onclick="closeModal('contact-modal')" class="w-full mt-6 bg-slate-900 text-white py-4 rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-slate-200">확인했습니다</button>
         </div>
     </div>
 
+    <!-- Hero Section -->
     <header class="hero-gradient text-white py-20 sm:py-28 px-4 sm:px-6 text-center relative overflow-hidden">
         <div class="relative z-10">
-            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 sm:px-6 py-2 rounded-full border border-white/20 mb-6 sm:mb-8">
+            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 sm:px-6 py-2 rounded-full border border-white/20 mb-6 sm:mb-8 select-none">
                 <span class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
                 <span class="text-xs sm:text-sm font-bold tracking-widest">S-GRADE PREMIUM CLEARANCE</span>
             </div>
@@ -196,6 +194,7 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 -mt-12 sm:-mt-16 relative z-20 pb-20 sm:pb-32">
+        <!-- 정책 요약 -->
         <div class="mb-12 sm:mb-16">
             <section class="bg-white rounded-3xl sm:rounded-[3rem] shadow-2xl p-6 sm:p-10 border border-blue-50 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
                 <div class="flex flex-col items-center text-center p-2 sm:p-4 hover:bg-slate-50 rounded-2xl transition-colors">
@@ -221,6 +220,7 @@
             </section>
         </div>
 
+        <!-- 필터 및 검색 -->
         <section class="mb-8 sm:mb-12">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-8 mb-4">
                 <div id="filter-container" class="flex flex-row md:flex-wrap gap-2 overflow-x-auto pb-2 md:pb-0 hide-scrollbar" style="-webkit-overflow-scrolling: touch; scrollbar-width: none;">
@@ -235,16 +235,19 @@
                     <input type="text" id="search-bar" placeholder="기구명을 입력하세요..." class="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-2xl border-2 border-slate-100 focus:border-blue-500 focus:outline-none shadow-sm transition-all text-sm sm:text-base font-medium">
                 </div>
             </div>
-            <p class="text-xs sm:text-sm text-blue-500 font-bold flex items-center gap-2">
-                <span class="inline-block w-4 h-4 sm:w-5 sm:h-5 bg-blue-100 text-center rounded-full text-[10px] sm:text-xs leading-4 sm:leading-5 shrink-0">i</span>
-                <span class="break-keep">기구 이름(파란색 글씨)을 길게 누르거나 마우스를 올리면 실물 사진을 확인할 수 있습니다.</span>
-            </p>
+            <div class="flex justify-between items-center">
+                <p class="text-xs sm:text-sm text-blue-500 font-bold flex items-center gap-2">
+                    <span class="inline-block w-4 h-4 sm:w-5 sm:h-5 bg-blue-100 text-center rounded-full text-[10px] sm:text-xs leading-4 sm:leading-5 shrink-0">i</span>
+                    <span class="break-keep">파란색 기구 이름을 길게 누르거나 마우스를 올리면 실물 사진이 보입니다.</span>
+                </p>
+            </div>
         </section>
 
         <!-- Product Grid -->
         <section id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
-            <!-- Populated via JS -->
+            <!-- JS 렌더링 영역 -->
         </section>
+
     </main>
 
     <footer class="bg-slate-900 text-white py-16 sm:py-24 px-4 sm:px-6">
@@ -277,11 +280,8 @@
     </footer>
 
     <script>
-        // ★ 관리자님 필독! ★
-        // 기구가 팔리면 아래 목록에서 해당 기구의 soldOut: false 부분을 soldOut: true 로만 변경하고 저장(Commit)하시면 됩니다!
-        
         const products = [
-            { id: 1, name: "M-토쳐 와이드 풀다운 리어 2", color: "흑색/레드", grade: "기본형", muscle: "등", oldPrice: "3,370,000", price: "1,300,000", soldOut: true },
+             { id: 1, name: "M-토쳐 와이드 풀다운 리어 2", color: "흑색/레드", grade: "기본형", muscle: "등", oldPrice: "3,370,000", price: "1,300,000", soldOut: true },
             { id: 2, name: "M-토쳐 핵 프레스", color: "흑색", grade: "기본형", muscle: "하체", oldPrice: "4,390,000", price: "2,340,000", soldOut: true },
             { id: 3, name: "M-토쳐 핵 프레스", color: "백색", grade: "기본형", muscle: "하체", oldPrice: "4,390,000", price: "2,340,000", soldOut: true },
             { id: 4, name: "M-토쳐 힙 트러스트(회전형)", color: "실버함마톤", grade: "프리미엄(구형)", muscle: "하체", oldPrice: "4,700,000", price: "2,600,000", soldOut: true },
@@ -318,36 +318,28 @@
             { id: 35, name: "SY SPORTS-스탠딩 아웃타이(원판형)", color: "블랙", grade: "기본형", muscle: "하체", oldPrice: "1,370,000", price: "950,000", soldOut: false }
         ];
 
+        let currentFilteredProducts = [...products];
         const grid = document.getElementById('product-grid');
         const searchBar = document.getElementById('search-bar');
-        const filterBtns = document.querySelectorAll('.filter-btn');
         const preview = document.getElementById('image-preview');
         const previewImg = document.getElementById('preview-img');
-        const modal = document.getElementById('contact-modal');
-        
-        function openModal() {
-            modal.style.display = 'flex';
+
+        window.openModal = (id) => {
+            document.getElementById(id).style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-
-        function closeModal() {
-            modal.style.display = 'none';
+        window.closeModal = (id) => {
+            document.getElementById(id).style.display = 'none';
             document.body.style.overflow = 'auto';
         }
 
-        function render(items) {
-            grid.innerHTML = items.map(p => {
+        function render() {
+            grid.innerHTML = currentFilteredProducts.map(p => {
                 const mainImage = `./images/${p.id}_main.jpg`; 
                 const saleImage = `./images/${p.id}_sale.jpg`;
 
                 return `
                 <div class="product-card bg-white rounded-3xl sm:rounded-[2.5rem] overflow-hidden shadow-lg border border-slate-50 flex flex-col relative">
-                    
-                    ${p.soldOut ? `
-                        <div class="absolute inset-0 bg-black/10 z-20 flex flex-col items-center justify-center rounded-3xl sm:rounded-[2.5rem] pointer-events-none">
-                            <div class="sold-out-stamp">SOLD OUT</div>
-                        </div>
-                    ` : ''}
 
                     <div class="img-container group">
                         <img src="${mainImage}" onerror="this.onerror=null; this.src='https://placehold.co/600x450/f1f5f9/94a3b8?text=이미지+준비중';" alt="${p.name}" class="transition-transform duration-700 group-hover:scale-105 ${p.soldOut ? 'grayscale opacity-80' : ''}">
@@ -362,7 +354,15 @@
                         <p class="text-xs sm:text-sm text-slate-400 mb-6 sm:mb-8 font-semibold tracking-tight">${p.color} | ${p.grade}</p>
                         
                         <div class="mt-auto">
-                            <div class="flex flex-col gap-1 mb-5 sm:mb-6">
+                            <!-- 이 곳이 가격표 위치입니다. 여기에 SOLD OUT 스탬프가 찍힙니다! -->
+                            <div class="flex flex-col gap-1 mb-5 sm:mb-6 relative">
+                                
+                                ${p.soldOut ? `
+                                    <div class="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+                                        <div class="sold-out-stamp" style="font-size: 1.2rem; padding: 0.2rem 0.8rem; transform: rotate(-10deg);">SOLD OUT</div>
+                                    </div>
+                                ` : ''}
+
                                 <span class="text-xs sm:text-sm font-bold text-slate-400 line-through decoration-slate-300">정상가: ${p.oldPrice}원</span>
                                 <div class="flex items-baseline gap-2 flex-wrap">
                                     <span class="text-2xl sm:text-3xl font-black ${p.soldOut ? 'text-slate-500' : 'text-red-500'} break-all">${p.price}원</span>
@@ -370,7 +370,7 @@
                                 </div>
                                 <span class="text-[10px] text-slate-400 font-bold mt-1">* VAT 별도 금액</span>
                             </div>
-                            <button ${p.soldOut ? '' : 'onclick="openModal()"'} class="w-full ${p.soldOut ? 'bg-slate-300 cursor-not-allowed' : 'bg-slate-900 hover:bg-blue-600'} text-white py-3 sm:py-4 rounded-xl sm:rounded-2xl text-sm sm:text-base font-bold transition-all flex items-center justify-center gap-2 group">
+                            <button ${p.soldOut ? '' : 'onclick="openModal(\'contact-modal\')"'} class="w-full ${p.soldOut ? 'bg-slate-300 cursor-not-allowed' : 'bg-slate-900 hover:bg-blue-600'} text-white py-3 sm:py-4 rounded-xl sm:rounded-2xl text-sm sm:text-base font-bold transition-all flex items-center justify-center gap-2 group">
                                 <span>${p.soldOut ? '판매 완료' : '견적 문의하기'}</span>
                                 ${!p.soldOut ? `<span class="group-hover:translate-x-1 transition-transform">→</span>` : ''}
                             </button>
@@ -378,15 +378,16 @@
                     </div>
                 </div>
             `}).join('');
+            
+            attachPreviewEvents();
+        }
 
+        function attachPreviewEvents() {
             const triggers = document.querySelectorAll('.preview-trigger');
             triggers.forEach(el => {
-                // Desktop
                 el.addEventListener('mouseenter', (e) => {
                     if (window.innerWidth > 768) {
-                        previewImg.onerror = function() {
-                            this.src = 'https://placehold.co/600x450/f8fafc/94a3b8?text=실물+사진+준비중';
-                        };
+                        previewImg.onerror = function() { this.src = 'https://placehold.co/600x450/f8fafc/94a3b8?text=실물+사진+준비중'; };
                         previewImg.src = e.target.getAttribute('data-saleimg');
                         preview.style.display = 'block';
                     }
@@ -403,12 +404,9 @@
                     }
                 });
 
-                // Mobile Touch
                 el.addEventListener('touchstart', (e) => {
                     if (window.innerWidth <= 768) {
-                        previewImg.onerror = function() {
-                            this.src = 'https://placehold.co/600x450/f8fafc/94a3b8?text=실물+사진+준비중';
-                        };
+                        previewImg.onerror = function() { this.src = 'https://placehold.co/600x450/f8fafc/94a3b8?text=실물+사진+준비중'; };
                         previewImg.src = e.target.getAttribute('data-saleimg');
                         preview.style.display = 'block';
                     }
@@ -426,31 +424,26 @@
             const query = searchBar.value.toLowerCase();
             const category = document.querySelector('.filter-btn.active').dataset.category;
             
-            const filtered = products.filter(p => {
+            currentFilteredProducts = products.filter(p => {
                 const matchesSearch = p.name.toLowerCase().includes(query);
                 const matchesCategory = category === 'all' || p.muscle === category;
                 return matchesSearch && matchesCategory;
             });
-            render(filtered);
+            render();
         }
 
         searchBar.addEventListener('input', filter);
 
-        filterBtns.forEach(btn => {
+        document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 filter();
             });
         });
 
-        window.onclick = function(event) {
-            if (event.target == modal) closeModal();
-        }
-
-        window.onload = () => {
-            render(products);
-        };
+        // 앱 시작
+        render();
     </script>
 </body>
 </html>
