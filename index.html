@@ -30,7 +30,6 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
         }
 
-        /* 모바일 최적화 반응형 썸네일 */
         .img-container {
             width: 100%;
             aspect-ratio: 4 / 3; 
@@ -46,16 +45,19 @@
             padding: 1rem; 
         }
 
-        /* 판매완료 스탬프 스타일 (새로운 버전) */
         .sold-out-stamp {
-            border: 4px solid #ef4444;
-            color: #ef4444;
+            border: 5px solid #dc2626; /* 더 진하고 선명한 빨간색 테두리 */
+            color: #dc2626; /* 더 진한 빨간색 글씨 */
             font-weight: 900;
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(2px);
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            font-size: 2.8rem; /* 가격을 완전히 덮을 만큼 거대한 크기 */
+            padding: 0.5rem 1.5rem; 
+            transform: rotate(-10deg); /* 시각적 안정을 위해 살짝만 기울임 */
+            background-color: rgba(255, 255, 255, 0.95); /* 뒤에 숫자가 거의 안 보이도록 95% 불투명 흰색 배경 */
+            backdrop-filter: blur(4px); /* 뒤에 비치는 숫자를 완전히 뭉개버림 */
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.4); /* 빨간색 그림자로 강렬함 증폭 */
             letter-spacing: 0.05em;
+            white-space: nowrap; 
         }
 
         #image-preview {
@@ -103,7 +105,6 @@
             font-weight: 700;
         }
 
-        /* 모달 스타일 공통 */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -316,6 +317,7 @@
             { id: 33, name: "M-토쳐 핵 스쿼트 프리미엄(콤보형)", color: "갈색", grade: "프리미엄", muscle: "하체", oldPrice: "6,500,000", price: "4,000,000", soldOut: true },
             { id: 34, name: "M-토쳐 핵 스쿼트 프리미엄(콤보형)", color: "실버함마톤", grade: "프리미엄", muscle: "하체", oldPrice: "6,500,000", price: "4,000,000", soldOut: true },
             { id: 35, name: "SY SPORTS-스탠딩 아웃타이(원판형)", color: "블랙", grade: "기본형", muscle: "하체", oldPrice: "1,370,000", price: "950,000", soldOut: false }
+           
         ];
 
         let currentFilteredProducts = [...products];
@@ -342,6 +344,7 @@
                 <div class="product-card bg-white rounded-3xl sm:rounded-[2.5rem] overflow-hidden shadow-lg border border-slate-50 flex flex-col relative">
 
                     <div class="img-container group">
+                        <!-- 제품 썸네일 이미지 -->
                         <img src="${mainImage}" onerror="this.onerror=null; this.src='https://placehold.co/600x450/f1f5f9/94a3b8?text=이미지+준비중';" alt="${p.name}" class="transition-transform duration-700 group-hover:scale-105 ${p.soldOut ? 'grayscale opacity-80' : ''}">
                         <div class="absolute top-4 left-4 bg-blue-600 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg z-10">NO. ${String(p.id).padStart(2, '0')}</div>
                         <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-black text-slate-800 shadow-sm z-10">${p.muscle}</div>
@@ -354,22 +357,24 @@
                         <p class="text-xs sm:text-sm text-slate-400 mb-6 sm:mb-8 font-semibold tracking-tight">${p.color} | ${p.grade}</p>
                         
                         <div class="mt-auto">
-                            <!-- 이 곳이 가격표 위치입니다. 여기에 SOLD OUT 스탬프가 찍힙니다! -->
+                            <!-- 가격 및 SOLD OUT 스탬프 영역 -->
                             <div class="flex flex-col gap-1 mb-5 sm:mb-6 relative">
                                 
                                 ${p.soldOut ? `
-                                    <div class="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-                                        <div class="sold-out-stamp" style="font-size: 1.2rem; padding: 0.2rem 0.8rem; transform: rotate(-10deg);">SOLD OUT</div>
+                                    <!-- 가격표를 덮어버리는 대형 SOLD OUT 스탬프 -->
+                                    <div class="absolute inset-0 z-30 flex items-center justify-center pointer-events-none">
+                                        <div class="sold-out-stamp">SOLD OUT</div>
                                     </div>
                                 ` : ''}
 
                                 <span class="text-xs sm:text-sm font-bold text-slate-400 line-through decoration-slate-300">정상가: ${p.oldPrice}원</span>
                                 <div class="flex items-baseline gap-2 flex-wrap">
-                                    <span class="text-2xl sm:text-3xl font-black ${p.soldOut ? 'text-slate-500' : 'text-red-500'} break-all">${p.price}원</span>
+                                    <span class="text-2xl sm:text-3xl font-black ${p.soldOut ? 'text-slate-300' : 'text-red-500'} break-all">${p.price}원</span>
                                     ${!p.soldOut ? `<span class="text-[10px] sm:text-xs font-bold text-white bg-red-500 px-2 py-0.5 rounded shadow-sm whitespace-nowrap">할인가</span>` : ''}
                                 </div>
                                 <span class="text-[10px] text-slate-400 font-bold mt-1">* VAT 별도 금액</span>
                             </div>
+                            <!-- 문의 버튼 -->
                             <button ${p.soldOut ? '' : 'onclick="openModal(\'contact-modal\')"'} class="w-full ${p.soldOut ? 'bg-slate-300 cursor-not-allowed' : 'bg-slate-900 hover:bg-blue-600'} text-white py-3 sm:py-4 rounded-xl sm:rounded-2xl text-sm sm:text-base font-bold transition-all flex items-center justify-center gap-2 group">
                                 <span>${p.soldOut ? '판매 완료' : '견적 문의하기'}</span>
                                 ${!p.soldOut ? `<span class="group-hover:translate-x-1 transition-transform">→</span>` : ''}
